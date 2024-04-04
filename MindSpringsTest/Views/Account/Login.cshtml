@@ -6,8 +6,8 @@
 <h1 class="bg-info text-white">Login</h1>
 <div class="text-danger" asp-validation-summary="ModelOnly"></div>
 
-<form asp-action="Login" method="post">
-   @* <input type="hidden" asp-for="ReturnUrl" /> *@
+<form role="form" id="LoginForm">
+    @* <input type="hidden" asp-for="ReturnUrl" /> *@
     <div class="form-group">
         <label asp-for="Email"></label>
         <input asp-for="Email" type="email" class="form-control" />
@@ -16,5 +16,43 @@
         <label asp-for="Password"></label>
         <input asp-for="Password" class="form-control" type="password" />
     </div>
-    <button class="btn btn-primary" type="submit">Log In</button>
+    @* <button class="btn btn-primary" type="submit">Log In</button> *@
+    <input class="btn btn-primary" type="button" onclick="SubmitLoginForm()" value="Login In" />
 </form>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation//dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    <script type="text/javascript" asp-append-version="true">
+        function SubmitLoginForm() {
+            let validator = $("#LoginForm").validate();
+            validator.form();
+
+            if (validator.valid()) {
+
+                let form = $("#LoginForm").get(0);
+                $.ajax({
+                    url: '/Account/Login',
+                    type: 'POST',
+                    data: new FormData(form),
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function () {
+
+                    },
+                    complete: function () {
+
+                    },
+                    success: function (response) {
+                        window.location.href = "/String/Index";
+                    },
+                    error: function (xhr) {
+
+                    },
+
+                })
+            }
+        }
+    </script>
+}

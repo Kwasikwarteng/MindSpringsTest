@@ -51,7 +51,7 @@ namespace MindSpringsTest.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Login(Login login)
         {
             var (success, returnUrl) = await _authService.LoginAsync(login, ModelState);
