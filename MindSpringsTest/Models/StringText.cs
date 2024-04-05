@@ -10,5 +10,9 @@ namespace MindSpringsTest.Models
         public int Id { get; set; }
         [Required]
         public int TextValue { get; set; }
+
+        //Navigation Properties For App User
+        public string AppUserId { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }

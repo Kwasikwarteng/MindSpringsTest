@@ -9,5 +9,17 @@ namespace MindSpringsTest.Models.Data
         {
 
         }
+
+        public DbSet<StringText> StringTexts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<StringText>()
+                .HasOne(x => x.AppUser)
+                .WithMany(y => y.StringTexts)
+                .HasForeignKey(a => a.AppUserId);
+        }
     }
 }

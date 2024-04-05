@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MindSpringsTest.Extensions;
 using MindSpringsTest.Models;
 using MindSpringsTest.Models.Data;
 using MindSpringsTest.Services;
@@ -12,7 +13,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<RestExtension>();
 
+//Setup Option Classes
+builder.Services.Configure<TranslatorSettings>(builder.Configuration.GetSection("FunTranslationSettings"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
