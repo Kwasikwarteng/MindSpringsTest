@@ -10,4 +10,10 @@
         public int TextId { get; set; }
         public string TextToTranslate { get; set; }
     }
+
+    public class TranslatorResponseViewModel
+    {
+        public string Translation { get; set; }
+
+    }
 }

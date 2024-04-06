@@ -18,15 +18,27 @@ namespace MindSpringsTest.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create(StringTextCreateViewModel model)
+        [HttpPost]
+        public async Task<IActionResult> Create(StringTextGetViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                _stringTranslatorService.SendStringAsync(model);
-                return View(model);
-            }
+            var translationResponse = await _stringTranslatorService.SendStringAsync(model);
 
-            return RedirectToAction("index");
+            if (translationResponse != null)
+            {
+                // Redirect to a different action method upon successful API call
+                return RedirectToAction("GridList", translationResponse);
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Failed to translate the text.";
+                return View("Index");
+            }
+        }
+
+        public IActionResult GridList(TranslatorResponseViewModel viewModel)
+        {
+            //ViewBag.TranslatedText = translatedText;
+            return View(viewModel);
         }
     }
 }

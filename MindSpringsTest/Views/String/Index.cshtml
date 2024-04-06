@@ -1,52 +1,31 @@
-﻿
+﻿@model StringText
 @{
     ViewData["Title"] = "Index";
 }
 
-@* <div>
-    <form id="SubmitString" role="form">      
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Enter string you want to trnaslate</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div>
-        <input class="btn btn-primary" type="button" onclick="SubmitStringForm()" value="Translate" />
+<div>
+    <form role="form" id="SubmitString" class="card mt-5" enctype="multipart/form-data">
+        <section class="card-body">
+            <div class="form-group">
+                <label for="textToTranslate">Enter string you want to translate</label>
+                <textarea class="form-control" id="textToTranslate" name="TextToTranslate" rows="3"></textarea>
+            </div>
+            <button class="btn btn-primary" type="button" onclick="SubmitStringForm()">Translate</button>
+        </section>
     </form>
+
+    @if (!string.IsNullOrEmpty(ViewBag.TextToTranslate))
+    {
+        <div class="mt-3">
+            <h2>Translated Text (Yoda Speech)</h2>
+            <p>@ViewBag.TextToTranslate</p>
+        </div>
+    }
+
 </div>
 
 @section Scripts {
     <script src="~/lib/jquery-validation//dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-
-    <script type="text/javascript" asp-append-version="true">
-        function SubmitStringForm() {
-            let validator = $("#SubmitString").validate();
-            validator.form();
-
-            if (validator.valid()) {
-
-                let form = $("#SubmitString").get(0);
-                $.ajax({
-                    url: '/String/Create',
-                    type: 'POST',
-                    data: new FormData(form),
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function () {
-
-                    },
-                    complete: function () {
-
-                    },
-                    success: function (response) {
-                        window.location.href = "/String/Index";
-                    },
-                    error: function (xhr) {
-
-                    },
-
-                })
-            }
-        }
-    </script>
+    <script src="~/js/StringTranslator.js" asp-append-version="true"></script>
 }
- *@

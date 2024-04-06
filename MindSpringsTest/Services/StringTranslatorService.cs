@@ -2,7 +2,7 @@
 using MindSpringsTest.Models.Data;
 using MindSpringsTest.Models.ViewModels;
 using MindSpringsTest.Services.IServices;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace MindSpringsTest.Services
@@ -12,6 +12,8 @@ namespace MindSpringsTest.Services
         private readonly AppIdentityDbContext _appIdentityDbContext;
         private readonly RestExtension _restExtension;
         private readonly TranslatorSettings _translatorSettings;
+        private readonly RestClient _restClient;
+
 
         public StringTranslatorService(AppIdentityDbContext appIdentityDbContext, RestExtension restExtension, TranslatorSettings translatorSettings)
         {
@@ -20,41 +22,31 @@ namespace MindSpringsTest.Services
             _translatorSettings = translatorSettings;
         }
 
-        public async Task<Models.ViewModels.StringTextGetViewModel> SendStringAsync(StringTextCreateViewModel viewModel)
+        public async Task<TranslatorResponseViewModel> SendStringAsync(StringTextGetViewModel viewModel)
         {
-            try
+            string baseUrl = "https://api.funtranslations.com/";
+            var client = new RestClient(baseUrl);
+            var request = new RestRequest("translate/yoda.json", Method.Post);
+            request.AddJsonBody(new { text = viewModel.TextToTranslate });
+            var response = await client.ExecuteAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                dynamic model = new
+                var responseObject = JObject.Parse(response.Content);
+                var contentsObject = responseObject["contents"];
+                var translatedText = contentsObject["translated"].Value<string>();
+                //var translatedMessage = JsonConvert.DeserializeObject<TranslatorResponseViewModel>(response.Content);
+
+                var translatorResponse = new TranslatorResponseViewModel
                 {
-                    TextToTranslate = viewModel.TextToTranslate,
+                    Translation = translatedText
                 };
 
-                RestModel restModel = new RestModel
-                {
-                    BaseUrl = _translatorSettings.FunTranslationBaseUrl,
-                    ApiResource = _translatorSettings.YodaApiResource,
-                    RequestMethod = Method.Post,
-                    RequestBody = model,
-                };
-
-                var response = await _restExtension.ExecuteAsync(restModel);
-                if (!response.IsSuccessful)
-                    return null;
-
-                var responseViewModel = JsonConvert.DeserializeObject<StringTextGetViewModel>(response.Content);
-
-                return responseViewModel;
+                return translatorResponse;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            finally
-            {
+            return new TranslatorResponseViewModel();
 
-            }
 
-            return new StringTextGetViewModel();
         }
     }
 }

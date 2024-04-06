@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlSer
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IStringTranslatorService, StringTranslatorService>();
+builder.Services.AddSingleton<TranslatorSettings>();
 builder.Services.AddScoped<RestExtension>();
 
 //Setup Option Classes
