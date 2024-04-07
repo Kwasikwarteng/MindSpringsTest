@@ -26,7 +26,8 @@ namespace MindSpringsTest.Controllers
             if (translationResponse != null)
             {
                 // Redirect to a different action method upon successful API call
-                return RedirectToAction("GridList", translationResponse);
+                TempData["TranslatedText"] = translationResponse.Translation;
+                return RedirectToAction("GridList");
             }
             else
             {
@@ -35,10 +36,21 @@ namespace MindSpringsTest.Controllers
             }
         }
 
-        public IActionResult GridList(TranslatorResponseViewModel viewModel)
+        public IActionResult GridList()
         {
-            //ViewBag.TranslatedText = translatedText;
-            return View(viewModel);
+            string translatedText = TempData["TranslatedText"] as string;
+            if (translatedText != null)
+            {
+                // Pass the translated text to the view
+                ViewBag.Translation = translatedText;
+                return View();
+            }
+            else
+            {
+                // Handle the case where TempData does not contain translated text
+                ViewBag.ErrorMessage = "Translated text not found.";
+                return View("Index");
+            }
         }
     }
 }

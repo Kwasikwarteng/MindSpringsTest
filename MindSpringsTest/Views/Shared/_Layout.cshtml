@@ -10,32 +10,28 @@
 </head>
 <body>
     <header>
-        <nav class="">
+     @*    <nav class="">
             <ul class="nav justify-content-end">
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
-                </li>
-           
+                </li>       
             </ul>
-        </nav>    
-
-
-
+        </nav>     *@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
+@* 
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - MindSpringsTest - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer> *@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
