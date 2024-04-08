@@ -25,7 +25,8 @@ namespace MindSpringsTest.Controllers
 
             if (translationResponse != null)
             {
-                return RedirectToAction("GridList", translationResponse);
+                TempData["Translation"] = translationResponse.Translation;
+                return RedirectToAction("GridList");
             }
             else
             {
@@ -34,11 +35,11 @@ namespace MindSpringsTest.Controllers
             }
         }
 
-        public IActionResult GridList(TranslatorResponseViewModel viewModel)
+        public IActionResult GridList()
         {
             var model = new TranslatorResponseViewModel
             {
-                Translation = viewModel.Translation,
+                Translation = TempData["Translation"]?.ToString()
             };
             return View(model);
         }
